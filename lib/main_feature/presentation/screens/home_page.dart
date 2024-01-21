@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sporttimer/main_feature/presentation/state_bloc/plus_mines_cubit/cubit/counter_cubit.dart';
 import 'package:sporttimer/main_feature/widgets/box_time.dart';
 import 'package:sporttimer/main_feature/widgets/const_widgets.dart';
 
@@ -43,27 +45,52 @@ class MyHomePage extends StatelessWidget {
             width: double.infinity,
             height: double.infinity,
           ),
-          const Center(
-            child: Column(
-              children: [
-                BoxTimer(
-                  title: "Round length",
-                  min: 10,
-                  secend: 46,
-                  imagePath: "assets/images/1.jpg",
-                ),
-                BoxTimer(
-                  title: "Rest time",
-                  min: 4,
-                  secend: 9,
-                  imagePath: "assets/images/2.jpg",
-                ),
-                BoxTimer(
-                  title: "Rounds",
-                  min: 3,
-                  imagePath: "assets/images/3.jpg",
-                ),
-              ],
+          Center(
+            child: BlocBuilder<CounterCubit, CounterState>(
+              builder: (context, state) {
+                return Column(
+                  children: [
+                    BoxTimer(
+                      title: "Round length",
+                      min: state.minTimeRound,
+                      secend: state.secondTimeRound,
+                      imagePath: "assets/images/1.jpg",
+                      plus: () {
+                        BlocProvider.of<CounterCubit>(context).plusRoundTimer();
+                      },
+                      mines: () {
+                        BlocProvider.of<CounterCubit>(context)
+                            .minesRoundTime(context);
+                      },
+                    ),
+                    BoxTimer(
+                      title: "Rest time",
+                      min: state.minRestTime,
+                      secend: state.secondRestTime,
+                      imagePath: "assets/images/2.jpg",
+                      plus: () {
+                        BlocProvider.of<CounterCubit>(context).plusRestTime();
+                      },
+                      mines: () {
+                        BlocProvider.of<CounterCubit>(context)
+                            .minesRestTime(context);
+                      },
+                    ),
+                    BoxTimer(
+                      title: "Rounds",
+                      min: state.roundNumber,
+                      imagePath: "assets/images/3.jpg",
+                      plus: () {
+                        BlocProvider.of<CounterCubit>(context).plusRound();
+                      },
+                      mines: () {
+                        BlocProvider.of<CounterCubit>(context)
+                            .minesRound(context);
+                      },
+                    ),
+                  ],
+                );
+              },
             ),
           ),
           Positioned(

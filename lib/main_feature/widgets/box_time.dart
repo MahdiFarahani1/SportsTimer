@@ -6,13 +6,17 @@ class BoxTimer extends StatelessWidget {
   final String title, imagePath;
   final int min;
   final int? secend;
+  final Function plus, mines;
 
-  const BoxTimer(
-      {super.key,
-      required this.title,
-      required this.imagePath,
-      required this.min,
-      this.secend});
+  const BoxTimer({
+    Key? key,
+    required this.title,
+    required this.imagePath,
+    required this.min,
+    this.secend,
+    required this.plus,
+    required this.mines,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +25,9 @@ class BoxTimer extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(top: 16),
       decoration: BoxDecoration(
-          color: Colors.grey.shade100, borderRadius: BorderRadius.circular(12)),
+        color: Colors.grey.shade100,
+        borderRadius: BorderRadius.circular(12),
+      ),
       width: width * 0.9,
       height: height * 0.11,
       child: Row(
@@ -33,16 +39,26 @@ class BoxTimer extends StatelessWidget {
           Expanded(
             child: Row(
               children: [
-                Constants.iconBtn(
+                GestureDetector(
+                  child: Constants.iconBtn(
                     icon: Icons.add,
-                    onTap: () {},
+                    onTap: () {
+                      plus();
+                    },
                     bgcol: Colors.black,
-                    iconColor: Colors.white),
-                Constants.iconBtn(
+                    iconColor: Colors.white,
+                  ),
+                ),
+                GestureDetector(
+                  child: Constants.iconBtn(
                     icon: Icons.remove,
-                    onTap: () {},
+                    onTap: () {
+                      mines();
+                    },
                     bgcol: Colors.black,
-                    iconColor: Colors.white),
+                    iconColor: Colors.white,
+                  ),
+                ),
               ],
             ),
           ),
@@ -83,8 +99,9 @@ class BoxTimer extends StatelessWidget {
               ),
               Container(
                 decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(12)),
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(12),
+                ),
                 child: FittedBox(
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
@@ -103,21 +120,19 @@ class BoxTimer extends StatelessWidget {
           const SizedBox(
             width: 12,
           ),
-          Positioned(
-            right: 0,
-            child: Container(
-              height: height * 0.11,
-              width: width * 0.2,
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.only(
-                    bottomRight: Radius.circular(12),
-                    topRight: Radius.circular(12)),
-                image: DecorationImage(
-                  filterQuality: FilterQuality.high,
-                  fit: BoxFit.fitWidth,
-                  image: AssetImage(
-                    imagePath,
-                  ),
+          Container(
+            height: height * 0.11,
+            width: width * 0.2,
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.only(
+                bottomRight: Radius.circular(12),
+                topRight: Radius.circular(12),
+              ),
+              image: DecorationImage(
+                filterQuality: FilterQuality.high,
+                fit: BoxFit.fitWidth,
+                image: AssetImage(
+                  imagePath,
                 ),
               ),
             ),
