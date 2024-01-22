@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sporttimer/main_feature/presentation/screens/timer_screen.dart';
 import 'package:sporttimer/main_feature/presentation/state_bloc/plus_mines_cubit/cubit/counter_cubit.dart';
 import 'package:sporttimer/main_feature/widgets/box_time.dart';
 import 'package:sporttimer/main_feature/widgets/const_widgets.dart';
@@ -100,7 +102,9 @@ class MyHomePage extends StatelessWidget {
               backgroundColor: Colors.black,
               radius: 34,
               child: IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    context.push(TimerPage.routeName);
+                  },
                   icon: const Icon(
                     Icons.play_arrow,
                     color: Colors.white,
