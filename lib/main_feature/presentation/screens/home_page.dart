@@ -103,7 +103,16 @@ class MyHomePage extends StatelessWidget {
               radius: 34,
               child: IconButton(
                   onPressed: () {
-                    context.push(TimerPage.routeName);
+                    context.push(TimerPage.routeName, extra: [
+                      BlocProvider.of<CounterCubit>(context).state.minTimeRound,
+                      BlocProvider.of<CounterCubit>(context)
+                          .state
+                          .secondTimeRound,
+                      BlocProvider.of<CounterCubit>(context).state.minRestTime,
+                      BlocProvider.of<CounterCubit>(context)
+                          .state
+                          .secondRestTime,
+                    ]);
                   },
                   icon: const Icon(
                     Icons.play_arrow,
