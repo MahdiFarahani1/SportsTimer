@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
           GoRoute(path: "/", builder: (context, state) => const MyHomePage()),
           GoRoute(
               path: TimerPage.routeName,
-              builder: (context, state) => TimerPage()),
+              builder: (context, state) => const TimerPage()),
         ]),
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',

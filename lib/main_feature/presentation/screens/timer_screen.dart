@@ -1,18 +1,25 @@
 import 'package:count_down_time/count_down_time.dart';
+import 'package:delayed_widget/delayed_widget.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sporttimer/main_feature/presentation/state_bloc/start_timer_cubit.dart/cubit/start_timer_cubit.dart';
 import 'package:sporttimer/utils/fonts.dart';
+import 'package:sporttimer/utils/widgets/widgets.dart';
 
 class TimerPage extends StatelessWidget {
   static String routeName = "/timer_page";
-  TimerPage({super.key});
 
-  @override
+  const TimerPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     var data = GoRouterState.of(context).extra as List<int>;
+    int rounds = data[4] - 1;
+    final int constround = data[4] - 1;
+    final int lengthData = data[0] + data[1] + data[2] + data[3] + data[4];
 
     return PopScope(
       canPop: false,
@@ -58,21 +65,40 @@ class TimerPage extends StatelessWidget {
                     BlocBuilder<StartTimerCubit, StartTimerState>(
                       builder: (context, state) {
                         if (state is StartTimerInitial) {
-                          return CountDownTime(
-                            onTimeOut: () {
-                              BlocProvider.of<StartTimerCubit>(context)
-                                  .showText();
-                            },
-                            timeStartInSeconds: 6,
-                            textStyle: MyFonts.loraFont(
-                              fontsize: 70,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              CountDownTime(
+                                onTimeOut: () async {
+                                  await Future.delayed(
+                                          const Duration(milliseconds: 1200))
+                                      .then((value) =>
+                                          BlocProvider.of<StartTimerCubit>(
+                                                  context)
+                                              .showText());
+                                },
+                                timeStartInSeconds: 6,
+                                textStyle: MyFonts.loraFont(
+                                  fontsize: 70,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              DelayedWidget(
+                                  animation:
+                                      DelayedAnimations.SLIDE_FROM_BOTTOM,
+                                  animationDuration:
+                                      const Duration(milliseconds: 1500),
+                                  delayDuration:
+                                      const Duration(milliseconds: 200),
+                                  child:
+                                      MyWidgets.customText(text: "Start...")),
+                            ],
                           );
                         }
                         if (state is StartTimerDeleydText) {
-                          BlocProvider.of<StartTimerCubit>(context).showTimer();
+                          BlocProvider.of<StartTimerCubit>(context)
+                              .startRound();
                           return Center(
                             child: Text(
                               "GO!",
@@ -84,32 +110,110 @@ class TimerPage extends StatelessWidget {
                           );
                         }
                         if (state is StartTimerStarted) {
-                          return CountDownTime(
-                            onChangeTime: (time) {
-                              if (time == 0) {
-                                BlocProvider.of<StartTimerCubit>(context)
-                                    .restTime();
-                                print("heloo 000");
-                              }
-                            },
-                            timeStartInSeconds: data[0] * 60 + data[1] + 1,
-                            textStyle: MyFonts.loraFont(
-                              fontsize: 70,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              CountDownTime(
+                                onTimeOut: () async {
+                                  await Future.delayed(
+                                    const Duration(
+                                      milliseconds: 1200,
+                                    ),
+                                  ).then((value) async {
+                                    if (rounds > 0) {
+                                      rounds--;
+
+                                      BlocProvider.of<StartTimerCubit>(context)
+                                          .restTime();
+                                    } else {
+                                      BlocProvider.of<StartTimerCubit>(context)
+                                          .onFinish();
+                                      await Future.delayed(const Duration(
+                                              milliseconds: 1100))
+                                          .then((value) {
+                                        BlocProvider.of<StartTimerCubit>(
+                                                context)
+                                            .initState();
+                                        Navigator.pop(context, true);
+                                      });
+                                    }
+                                  });
+                                },
+                                timeStartInSeconds: data[0] * 60 + data[1] + 1,
+                                textStyle: MyFonts.loraFont(
+                                  fontsize: 70,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              MyWidgets.customText(
+                                  text:
+                                      "Round ${constround - (rounds - 1)}\n  ${constround - (rounds - 1)} of ${data[4]}"),
+                              MyWidgets.customSlider(
+                                  constround - (rounds - 1),
+                                  lengthData,
+                                  rounds,
+                                  constround - (rounds - 1),
+                                  data),
+                            ],
                           );
                         }
                         if (state is StartTimerRestTime) {
-                          return CountDownTime(
-                            onTimeOut: () {},
-                            timeStartInSeconds: 5,
-                            textStyle: MyFonts.loraFont(
-                              fontsize: 70,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              TimerCountdown(
+                                colonsTextStyle: MyFonts.loraFont(
+                                  fontsize: 70,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                enableDescriptions: false,
+                                onEnd: () {
+                                  BlocProvider.of<StartTimerCubit>(context)
+                                      .startRound();
+                                },
+                                format: CountDownTimerFormat.minutesSeconds,
+                                timeTextStyle: MyFonts.loraFont(
+                                  fontsize: 70,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                endTime: DateTime.now().add(
+                                  Duration(
+                                    seconds: data[3] + 1,
+                                    minutes: data[2],
+                                  ),
+                                ),
+                              ),
+                              MyWidgets.customText(
+                                  text:
+                                      "Rest time\n    ${constround - (rounds - 1)} of ${data[4]}"),
+                              MyWidgets.customSlider(
+                                  constround - (rounds - 1),
+                                  lengthData,
+                                  rounds,
+                                  constround - (rounds - 1),
+                                  data),
+                            ],
                           );
+                        }
+
+                        if (state is StartTimerFinish) {
+                          return Center(
+                              child: DelayedWidget(
+                            animation: DelayedAnimations.SLIDE_FROM_BOTTOM,
+                            animationDuration:
+                                const Duration(milliseconds: 800),
+                            delayDuration: const Duration(milliseconds: 100),
+                            child: Text(
+                              "Finish!",
+                              style: MyFonts.loraFont(
+                                  fontsize: 60,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ));
                         }
                         return Container();
                       },
@@ -119,7 +223,7 @@ class TimerPage extends StatelessWidget {
               ),
               const Spacer(),
               Padding(
-                padding: const EdgeInsets.only(bottom: 8),
+                padding: const EdgeInsets.all(8.0),
                 child: CircleAvatar(
                   backgroundColor: Colors.grey.shade900,
                   radius: 35,
@@ -131,11 +235,25 @@ class TimerPage extends StatelessWidget {
                         size: 36,
                       )),
                 ),
-              )
+              ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  static double currentTimerLength(
+      int rounds, int currentRound, List<int> data) {
+    int totalDuration = data[0] * 60 + data[1] + 1; // مدت زمان کل تایمر
+    int restDuration = data[3] + 1; // مدت زمان استراحت
+
+    int currentRoundDuration =
+        (currentRound % 2 == 0) ? restDuration : totalDuration;
+
+    int remainingTime = rounds * currentRoundDuration;
+
+    double currentLength = remainingTime / totalDuration;
+    return 1.0 - currentLength;
   }
 }

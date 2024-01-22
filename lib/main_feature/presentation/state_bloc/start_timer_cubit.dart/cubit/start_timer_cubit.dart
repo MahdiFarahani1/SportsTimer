@@ -1,21 +1,18 @@
-import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'start_timer_state.dart';
 
 class StartTimerCubit extends Cubit<StartTimerState> {
   StartTimerCubit() : super(StartTimerInitial());
-
   showText() {
     emit(StartTimerDeleydText());
   }
 
-  showTimer() async {
-    await Future.delayed(const Duration(seconds: 1), () {}).then(
-      (value) => emit(
-        StartTimerStarted(),
-      ),
-    );
+  startRound() async {
+    await Future.delayed(const Duration(seconds: 1), () {}).then((value) {
+      emit(StartTimerStarted());
+    });
   }
 
   initState() {
@@ -24,5 +21,9 @@ class StartTimerCubit extends Cubit<StartTimerState> {
 
   restTime() {
     emit(StartTimerRestTime());
+  }
+
+  onFinish() {
+    emit(StartTimerFinish());
   }
 }

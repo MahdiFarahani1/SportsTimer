@@ -38,9 +38,11 @@ dependencies:
   bloc: ^8.1.2
   flutter_bloc: ^8.1.3
   google_fonts: ^6.1.0
-  
+  flutter_timer_countdown: ^1.0.7
   go_router: ^13.0.1
   count_down_time: ^0.0.8
+  delayed_widget: ^1.1.2
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

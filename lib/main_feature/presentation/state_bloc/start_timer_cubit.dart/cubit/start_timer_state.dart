@@ -10,3 +10,5 @@ final class StartTimerDeleydText extends StartTimerState {}
 final class StartTimerStarted extends StartTimerState {}
 
 final class StartTimerRestTime extends StartTimerState {}
+
+final class StartTimerFinish extends StartTimerState {}

@@ -112,6 +112,7 @@ class MyHomePage extends StatelessWidget {
                       BlocProvider.of<CounterCubit>(context)
                           .state
                           .secondRestTime,
+                      BlocProvider.of<CounterCubit>(context).state.roundNumber,
                     ]);
                   },
                   icon: const Icon(
