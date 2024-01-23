@@ -16,10 +16,9 @@ class TimerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var data = GoRouterState.of(context).extra as List<int>;
+    List<int> data = GoRouterState.of(context).extra as List<int>;
     int rounds = data[4] - 1;
     final int constround = data[4] - 1;
-    final int lengthData = data[0] + data[1] + data[2] + data[3] + data[4];
 
     return PopScope(
       canPop: false,
@@ -99,6 +98,7 @@ class TimerPage extends StatelessWidget {
                         if (state is StartTimerDeleydText) {
                           BlocProvider.of<StartTimerCubit>(context)
                               .startRound();
+
                           return Center(
                             child: Text(
                               "GO!",
@@ -149,12 +149,6 @@ class TimerPage extends StatelessWidget {
                               MyWidgets.customText(
                                   text:
                                       "Round ${constround - (rounds - 1)}\n  ${constround - (rounds - 1)} of ${data[4]}"),
-                              MyWidgets.customSlider(
-                                  constround - (rounds - 1),
-                                  lengthData,
-                                  rounds,
-                                  constround - (rounds - 1),
-                                  data),
                             ],
                           );
                         }
@@ -163,6 +157,7 @@ class TimerPage extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               TimerCountdown(
+                                onTick: (remainingTime) {},
                                 colonsTextStyle: MyFonts.loraFont(
                                   fontsize: 70,
                                   color: Colors.white,
@@ -189,12 +184,6 @@ class TimerPage extends StatelessWidget {
                               MyWidgets.customText(
                                   text:
                                       "Rest time\n    ${constround - (rounds - 1)} of ${data[4]}"),
-                              MyWidgets.customSlider(
-                                  constround - (rounds - 1),
-                                  lengthData,
-                                  rounds,
-                                  constround - (rounds - 1),
-                                  data),
                             ],
                           );
                         }
@@ -222,38 +211,10 @@ class TimerPage extends StatelessWidget {
                 ),
               ),
               const Spacer(),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: CircleAvatar(
-                  backgroundColor: Colors.grey.shade900,
-                  radius: 35,
-                  child: IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.pause,
-                        color: Colors.white,
-                        size: 36,
-                      )),
-                ),
-              ),
             ],
           ),
         ),
       ),
     );
-  }
-
-  static double currentTimerLength(
-      int rounds, int currentRound, List<int> data) {
-    int totalDuration = data[0] * 60 + data[1] + 1; // مدت زمان کل تایمر
-    int restDuration = data[3] + 1; // مدت زمان استراحت
-
-    int currentRoundDuration =
-        (currentRound % 2 == 0) ? restDuration : totalDuration;
-
-    int remainingTime = rounds * currentRoundDuration;
-
-    double currentLength = remainingTime / totalDuration;
-    return 1.0 - currentLength;
   }
 }

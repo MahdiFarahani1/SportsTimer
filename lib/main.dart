@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:sporttimer/main_feature/presentation/screens/home_page.dart';
 import 'package:sporttimer/main_feature/presentation/screens/timer_screen.dart';
 import 'package:sporttimer/main_feature/presentation/state_bloc/plus_mines_cubit/cubit/counter_cubit.dart';
+import 'package:sporttimer/main_feature/presentation/state_bloc/slider_cubit/cubit/slider_cubit.dart';
 import 'package:sporttimer/main_feature/presentation/state_bloc/start_timer_cubit.dart/cubit/start_timer_cubit.dart';
 
 void main() {
@@ -23,6 +24,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => StartTimerCubit(),
         ),
+        BlocProvider(
+          create: (context) => SliderCubit(context),
+        )
       ],
       child: MaterialApp.router(
         routerConfig: GoRouter(routes: [
