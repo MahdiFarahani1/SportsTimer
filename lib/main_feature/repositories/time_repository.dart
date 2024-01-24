@@ -4,10 +4,8 @@ import 'package:sporttimer/main_feature/presentation/state_bloc/plus_mines_cubit
 
 class TimeLength {
   static int currentTimerLength({required List<int> data}) {
-    int totalDuration =
-        (data![0] * 60 + data[1] + 1) * data[4]; // مدت زمان کل تایمر
-    int restDuration =
-        (data[2] * 60 + data[3] + 1) * (data[4] - 1); // مدت زمان استراحت
+    int totalDuration = (data[0] * 60 + data[1] + 1) * data[4];
+    int restDuration = (data[2] * 60 + data[3] + 1) * (data[4] - 1);
     int currentLength = totalDuration + restDuration;
     print("Tour time:  $currentLength");
     return currentLength;

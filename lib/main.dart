@@ -25,8 +25,8 @@ class MyApp extends StatelessWidget {
           create: (context) => StartTimerCubit(),
         ),
         BlocProvider(
-          create: (context) => SliderCubit(context),
-        )
+          create: (context) => SliderCubit(),
+        ),
       ],
       child: MaterialApp.router(
         routerConfig: GoRouter(routes: [
