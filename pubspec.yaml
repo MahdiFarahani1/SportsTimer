@@ -44,6 +44,8 @@ dependencies:
   delayed_widget: ^1.1.2
   audioplayers: ^5.2.1
   
+  wakelock: ^0.6.2
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -65,6 +67,7 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  
 
   # To add assets to your application, add an assets section, like this:
   assets:

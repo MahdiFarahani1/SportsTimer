@@ -2,7 +2,9 @@ import 'package:audioplayers/audioplayers.dart';
 
 class AudioPlay {
   final audioPlayer = AudioPlayer();
-
+  AudioPlay() {
+    audioPlayer.setReleaseMode(ReleaseMode.release);
+  }
   Future<void> playRing() async {
     await audioPlayer.play(AssetSource("audios/start.mp3"));
   }

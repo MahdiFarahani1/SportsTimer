@@ -11,6 +11,7 @@ import 'package:sporttimer/main_feature/repositories/audio_play.dart';
 import 'package:sporttimer/main_feature/repositories/time_repository.dart';
 import 'package:sporttimer/utils/fonts.dart';
 import 'package:sporttimer/utils/widgets/widgets.dart';
+import 'package:wakelock/wakelock.dart';
 
 import '../state_bloc/plus_mines_cubit/cubit/counter_cubit.dart';
 
@@ -26,6 +27,8 @@ class TimerPage extends StatefulWidget {
 class _TimerPageState extends State<TimerPage> {
   @override
   void initState() {
+    Wakelock.enable();
+
     BlocProvider.of<SliderCubit>(context).startTimerSlider(
         context, BlocProvider.of<CounterCubit>(context).state.roundNumber);
     super.initState();
@@ -34,6 +37,8 @@ class _TimerPageState extends State<TimerPage> {
   var audio = AudioPlay();
   @override
   void dispose() {
+    Wakelock.disable();
+
     super.dispose();
     audio.dispose();
     BlocProvider.of<SliderCubit>(context).dispose();
