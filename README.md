@@ -10,5 +10,5 @@
   audioplayers: ^5.2.1 <br>
   wakelock: ^0.6.2 <br>
   <pre>
-<image src="Screenshot_1706182864.png" width="150" height="300">    <image src="Screenshot_1706182864.png" width="150" height="300">          
+<image src="Screenshot_1706182864.png" width="150" height="300">    <image src="Screenshot_1706182878.png" width="150" height="300">          
 </pre>
